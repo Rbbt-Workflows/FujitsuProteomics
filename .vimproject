@@ -1,0 +1,13 @@
+FujitsuProteomics=/$PWD filter="*.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.sass *.txt *.conf" {
+ workflow.rb
+ bin=bin filter="*"{
+ }
+ lib=lib {
+ }
+ test=test {
+  test_helper.rb
+ }
+ data=data filter="*"{
+  clinical_variants_exp.txt
+ }
+}
