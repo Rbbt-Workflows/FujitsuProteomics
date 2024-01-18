@@ -9,5 +9,6 @@ FujitsuProteomics=/$PWD filter="*.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml
  }
  data=data filter="*"{
   clinical_variants_exp.txt
+  test.txt
  }
 }

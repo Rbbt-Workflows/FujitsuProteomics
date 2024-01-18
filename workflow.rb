@@ -23,7 +23,7 @@ module FujitsuProteomics
 
   input :variants_file, :file, "File with variants in extended format", nil, :required => true
   task :parse_mutated_isoform => :tsv do |variants_file|
-    tsv = TSV.open variants_file, :type => :list, :key_field => 3, :organism => FujitsuProteomics.organism
+    tsv = TSV.open variants_file, :type => :list, :key_field => 3, :namespace => FujitsuProteomics.organism
     tsv.key_field = "Variant"
     tsv.fields = %w(Gene HGVS AA Chromosome Start End UniProt)
     tsv.add_field "Mutated Isoform" do |key,values|
@@ -39,7 +39,7 @@ module FujitsuProteomics
   dep :parse_mutated_isoform
   task :mutated_isoforms => :array do
     tsv = step(:parse_mutated_isoform).load
-    tsv.column("Mutated Isoform").values.flatten
+    tsv.column("Mutated Isoform").values.flatten.compact
   end
 
 
