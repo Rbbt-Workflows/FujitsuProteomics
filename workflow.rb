@@ -46,12 +46,28 @@ module FujitsuProteomics
   dep :mutated_isoforms
   dep_task :annotate, Proteomics, :mi_wizard, :mutated_isoforms => :mutated_isoforms, :organism => FujitsuProteomics.organism
 
-  dep :annotate
+  dep :annotate, :compute => :produce
   task :annotate_file => :tsv do
     tsv = step(:parse_mutated_isoform).path.tsv :type => :double
     annotations = step(:annotate).load
     tsv.attach annotations
   end
+
+  #{{{ DNA
+
+  input :dna_variants_file, :file, "Clinical variants in DNA coordinates", nil, :required => true
+  task :parse_genomic_variants => :array do |variants|
+    TSV.traverse variants, :type => :array, :into => :stream do |line|
+      chr, pos, ref, alt = line.split("\t")
+      pos, muts = Misc.correct_vcf_mutation(pos, ref, alt)
+      vars = muts.collect{|m| [chr, pos, m] * ":" }
+      vars.extend MultipleResult
+      vars
+    end
+  end
+
+  dep :parse_genomic_variants
+  dep_task :annotate_dna, Proteomics, :wizard, :mutations => :parse_genomic_variants, :organism => FujitsuProteomics.organism
 
 
 end
