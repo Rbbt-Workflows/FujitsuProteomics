@@ -11,7 +11,7 @@ module FujitsuProteomics
   extend Workflow
 
   def self.organism
-    "Hsa/may2017"
+    "Hsa/feb2023"
   end
 
   def self.uni2ensp(uniprot)
